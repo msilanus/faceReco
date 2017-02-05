@@ -16,11 +16,11 @@ La méthode utilisée ici est qualifiée de globale, puisque l’ensemble
 du visage est alors analysé.
 
 Cette technique de reconnaissance utilise la méthode d’analyse en composantes principales
-([PCA]()) ou la méthode de décomposition en valeurs singulières ([SVD](https://fr.wikipedia.org/wiki/D%C3%A9composition_en_valeurs_singuli%C3%A8res)).De manière simple, elle vise a diminuer de la dimension de l’espace de travail pour simplifier les données et leur interprétation. Le but est ainsi de prendre en compte les informations importantes qui permettront de reconnaître un visage parmi d’autres avec un bon taux de réussite.
+([PCA]()) ou la méthode de décomposition en valeurs singulières ([SVD](https://fr.wikipedia.org/wiki/D%C3%A9composition_en_valeurs_singuli%C3%A8res)).De manière simple, elle vise a diminuer la dimension de l’espace de travail pour simplifier les données et leur interprétation. Le but est ainsi de prendre en compte les informations importantes qui permettront de reconnaître un visage parmi d’autres avec un bon taux de réussite.
 
-On peut comparer la méthode des faces propres (eigenfaces) aux séries de Fourier qui permettent de représenter un signal périodique à l’aide de sommes de cosinus et de sinus : 
+On peut comparer la méthode des visages propres (eigenfaces) aux séries de Fourier qui permettent de représenter un signal périodique à l’aide de sommes de cosinus et de sinus : 
 
-Un signal périodique est la somme de sa valeur moyenne et de composantes propres appelées harmoniques (termes en sinus et cosinus). [Séries de Fourier : En savoir plus](http://lumimath.univ-mrs.fr/~jlm/cours/fourier/fouriersos.htm)
+Un signal périodique est la somme de sa valeur moyenne et de ses composantes propres appelées harmoniques (termes en sinus et cosinus). [Séries de Fourier : En savoir plus](http://lumimath.univ-mrs.fr/~jlm/cours/fourier/fouriersos.htm)
 
 <p align="center">
   <img src="http://lumimath.univ-mrs.fr/~jlm/cours/fourier/pic02.gif">
@@ -33,7 +33,7 @@ Un signal périodique est la somme de sa valeur moyenne et de composantes propre
 
 Dans ce projet, l'approche consiste à représenter un visage comme étant la combinaison linéaire d’un ensemble d’images, ces dernières formant une base de référence.
 
-Les images de références ou d'apprentissages sont chargées sous forme de matrices de dimensions lxh puis transformées en vecteurs :
+Les images de référence ou d'apprentissage sont chargées sous forme de matrices de dimensions lxh (largeur x hauteur en pixels) puis transformées en vecteurs :
 
 <p align="center">
   <img src="https://onionesquereality.files.wordpress.com/2009/02/untitled.jpg">
@@ -65,7 +65,7 @@ for i in range(N):
 ```
 
 ### Calcul du visage moyen
-Le visage moyen est déduit des M visages d’apprentissages. Il traduit les caractéristiques communes à tous ces visages.
+Le visage moyen est déduit des M visages d’apprentissage. Il traduit les caractéristiques communes à tous ces visages.
 
 <p align="center">
   <img src="https://s0.wp.com/latex.php?latex=%5CPsi+%3D+%5Cdisplaystyle%5Cfrac%7B1%7D%7BM%7D%5Csum_%7Bi%3D1%7D%5EM%5CGamma_i&bg=ffffff&fg=333333&s=0&zoom=2">
@@ -84,7 +84,7 @@ imsave("average.png",moyenne.reshape(heigh,length))
 ```
 
 ### Recherche des visages propres
-Le visage moyen est soustrait des visages d’apprentissages, ce qui ne laisse alors que les informations propres à chaque visages de référence. 
+Le visage moyen est soustrait des visages d’apprentissage, ce qui ne laisse alors que les informations propres à chaque visages de référence. 
 
 <p align="center">
   <img src="https://s0.wp.com/latex.php?latex=%5CPhi_i+%3D+%5CGamma_i+-+%5CPsi&bg=ffffff&fg=333333&s=0&zoom=2">
@@ -99,7 +99,7 @@ Le visage moyen est soustrait des visages d’apprentissages, ce qui ne laisse a
 phi = imgs - moyenne
 ```
 
-Les visages propores (eigenfaces) sont issues d'un traitement matématique qui s'appui sur l'utilisation au choix de la méthode PCA ou SVD. On fait le choix ici d'appliquer la méthode de décomposition en valeurs singulières ([SVD](https://fr.wikipedia.org/wiki/D%C3%A9composition_en_valeurs_singuli%C3%A8res)) :
+Les visages propres (eigenfaces) sont issues d'un traitement mathématique qui s'appui sur l'utilisation au choix de la méthode PCA ou SVD. On fait le choix ici d'appliquer la méthode de décomposition en valeurs singulières ([SVD](https://fr.wikipedia.org/wiki/D%C3%A9composition_en_valeurs_singuli%C3%A8res)) :
 
 ```python
 # Recherche des singularités des images : équivalent à la Covariance
@@ -123,8 +123,8 @@ for i in range(eigenfaces.shape[1]): # eigenfaces.shape[1] = nombre de colonnes 
     #print "eigenfaces"+str(i)+".png"+str( eigenfaces[:,i].reshape(heigh,length))
 ```
 
-### Calcul des poids associé à chaque visages propres
-Les images servant à l’apprentissage, auquel on a enlevé l’image moyenne, sont en fait combinaison linéaire des visages propres. 
+### Calcul des poids associés à chaque visages propres
+Les images servant à l’apprentissage, auxquels on a enlevé l’image moyenne, sont en fait la combinaison linéaire des visages propres. 
 
 <p align="center">
   <img src="https://s0.wp.com/latex.php?latex=%5CPhi_i+%3D+%5Csum_%7Bj%3D1%7D%5E%7BK%7Dw_ju_j&bg=ffffff&fg=333333&s=0&zoom=2">
@@ -134,12 +134,12 @@ Les images servant à l’apprentissage, auquel on a enlevé l’image moyenne, 
 * ![wi](https://s0.wp.com/latex.php?latex=w_j+%3D+u_j%5ET%5CPhi_i&bg=ffffff&fg=333333&s=0&zoom=2) : poids associés aux visages propres à partir des caractéristiques propres d'une image de référence (ou d'apprentissage)
 
 ```python
-# Chaque image d'origine - l'image moyenne (phi) peut être représenté par une 
+# Chaque image d'origine - l'image moyenne (phi) peut être représentée par une 
 # combinaison linéaire des vecteurs eigenfaces pondérés :
 # phi = weights x eigenfaces ou weight est le vecteur des pondérateurs
 # phi est un vecteur organisé en ligne
 # eigenfaces est un vecteur organisé en colonne
-# il faudrait donc transposé eigenfaces pour réaliser cette opération
+# il faudrait donc transposer eigenfaces pour réaliser cette opération
 # phi = weights x eigenfaces.T
 # Donc : weights = phi x eigenfaces.T.T => weights = phi x eigenfaces
 weights = numpy.dot(phi, eigenfaces)
@@ -177,7 +177,7 @@ for p in range(N):
 
 ### Identification d'une personne
 
-L'identification d'une personne consiste à trouver l'image qui lui ressemble le plus parmi les images de référence. La méthode est identique : retirer de l'image à trouver les caractéristiques moyennes puis calculer les pondérateurs avec l'ensemble des eigenfaces connus. On calcul ensuite la distance (méthode des moindres carrés) entre les pondérateurs des images de références et ceux de l'image à tester. 
+L'identification d'une personne consiste à trouver l'image qui lui ressemble le plus parmi les images de référence. La méthode est identique : retirer de l'image à trouver les caractéristiques moyennes puis calculer les pondérateurs avec l'ensemble des eigenfaces connues. On calcul ensuite la distance (méthode des moindres carrés) entre les pondérateurs des images de références et ceux de l'image à tester. 
 ```python
 import matplotlib.pyplot as plt
 
@@ -209,11 +209,11 @@ raw_input()
 ```
 ### Notion de seuil de reconnaissance 
 c'est la distance au dela de laquelle on ne peut pas être sur de la reconnaissance.
-Dans le cas de amber2.png qui n'a pas d'image de référence dans le dossier gallery,
+* Dans le cas de amber2.png qui n'a pas d'image de référence dans le dossier gallery,
 on obtient une identification fausse et une distance de 2.36145
-Dans le cas de zach1.png, lidentification est correcte sur une de ses images de
+* Dans le cas de zach1.png, l'identification est correcte sur une de ses images de
 référence pour une distance de 1.05518
-Dans le cas de erin2.png, la correspondance est parfaite avec une distance de 0
+* Dans le cas de erin2.png, la correspondance est parfaite avec une distance de 0
 On considérera une identification correcte pour une distance inférieure à 2
 ```python
 threshold = 2.0
