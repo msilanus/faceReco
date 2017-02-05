@@ -1,6 +1,6 @@
 # Application Qt myFaceReco
 <p align="center">
-  <img src="myFaceReco.png">
+  <img src="../myFaceReco.png">
 </p>
 
 ### Choisir un dossier
