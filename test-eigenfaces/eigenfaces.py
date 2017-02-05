@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jan 30 11:20:01 2017
-
+Updated on on Sun Feb 05 15:41:07 2017
 @author: Marc Silanus
 Note : Le dossier doit travail doit contenir 
 - eigenfaces.py
 - gallery : contient les photos de références
+- a_tester : contient les photos des visages à identifier
 - eingenfaces : Contiendra les eigenfaces
-- reconstruct : Contiendra les essais de reconstruction
+- reconst : Contiendra les essais de reconstruction
+- reconst2 : Contiendra les essais de reconstruction avec un nombre limité d'eigenfaces
 """
 
 from scipy import linalg
